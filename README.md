@@ -89,7 +89,7 @@ func notetsleepg(n *note, ns int64) bool {
   	// 4. 调用 futex
 	entersyscallblock() 
 	ok := notetsleep_internal(n, ns) 
-  	//  恢复现场
+  	//  恢复上下文
 	exitsyscall() 
 	return ok
 }
