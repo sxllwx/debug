@@ -30,31 +30,31 @@ GET！
 func timerproc(tb *timersBucket) {
 	tb.gp = getg()
 	for {
-    ...
+    		...
 		now := nanotime()
 		...
-    delta := int64(-1)
+    		delta := int64(-1)
 		for {
 			...
-            // 取出堆顶第一个timer
+            		// 取出堆顶第一个timer
 			t := tb.t[0]
 			delta = t.when - now
 			if delta > 0 {
-                // 还需要继续等...
+                	// 还需要继续等...
 				break
 			}
 			ok := true
 			if t.period > 0 {
-                // 是一个ticker
+                		// 是一个ticker
 				t.when += t.period * (1 + -delta/t.period)
-                // 调整timer堆
+                		// 调整timer堆
 				...
 			} else {
-                // 是一个timer
+                		// 是一个timer
 				// 从timer堆中移除，并且调整timer堆
 			}
 			...
-            // 发送当前时间到timer或者ticker的C中。
+            		// 发送当前时间到timer或者ticker的C中。
 			f(arg, seq)
 			lock(&tb.lock)
 		}
@@ -63,7 +63,7 @@ func timerproc(tb *timersBucket) {
 			goparkunlock(&tb.lock, waitReasonTimerGoroutineIdle, traceEvGoBlock, 1)
 			continue
 		}
-        // 清理内容 balabala
+        	// 清理内容 balabala
 		...
 		notetsleepg(&tb.waitnote, delta) //关键来了
 	}
