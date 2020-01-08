@@ -65,7 +65,7 @@ func timerproc(tb *timersBucket) {
 		}
         	// 清理内容 balabala
 		...
-		notetsleepg(&tb.waitnote, delta) //关键来了
+		notetsleepg(&tb.waitnote, delta) //关键来了（继续往下走）
 	}
 }
 
@@ -82,8 +82,14 @@ func notetsleepg(n *note, ns int64) bool {
 		throw("notetsleepg on g0")
 	}
 
-	entersyscallblock() // 为发起syscall之前做好当前的context报错，并且yeild P 
-	ok := notetsleep_internal(n, ns) // 内部调用 futex
+	// 当前这个goroutine需要进入syscall了，
+  // 1. 首先保存当前goroutine的PC等运行信息
+	// 2. 将当前goroutine的状态从running改为 syscall
+  // 3. 放弃绑在当前的goroutine上的P
+  // 4. 调用 futex
+	entersyscallblock() 
+	ok := notetsleep_internal(n, ns) 
+  //  恢复现场
 	exitsyscall() // 恢复context
 	return ok
 }
