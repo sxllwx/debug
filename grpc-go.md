@@ -8,7 +8,7 @@
 
 ## 从简单HellowordServer说起
 
-![image-20200408161634983](/Users/scott/Library/Application Support/typora-user-images/image-20200408161634983.png)
+![image-20200408161634983](https://github.com/sxllwx/debug/blob/master/imgs/grpc-server/main.png)
 
 最关键的3句分别为:
 
@@ -20,7 +20,7 @@
 
 ## grpc.NewServer()做了什么？我们可以用它做什么？
 
-![image-20200408162650178](/Users/scott/Library/Application Support/typora-user-images/image-20200408162650178.png)
+![image-20200408162650178](https://github.com/sxllwx/debug/blob/master/imgs/grpc-server/newserver.png)
 
 这段简单的代码中最为“骚气”的就是使用函数调用栈结构的特点递归的将链状的拦截器聚合起来的操作[具体函数入口](https://github.com/grpc/grpc-go/blob/98e4c7ad3eefd5c1a3cd647c004943ffab4f5722/server.go#L1174)。 这些拦截器在每次客户端请求Server端时就会被调用。
 
@@ -34,7 +34,7 @@
 
 该函数的作用为将protobuf生成的pb文件中所定义的gRPC服务注册到gRPC Server中，手段相对简单，通过反射取到实现接口的真正实例，并将其注册到
 
-![image-20200408170016980](/Users/scott/Library/Application Support/typora-user-images/image-20200408170016980.png)
+![image-20200408170016980](https://github.com/sxllwx/debug/blob/master/imgs/grpc-server/register-server.png)
 
 虽然gRPC.Server 拥有一个GetServiceInfo的方法获取该grpc.Server中已经注册的Services，但是因为字段较少，我仍然建议使用自己的方法对pb.RegisterGreeterServer进行装饰。
 
@@ -49,4 +49,4 @@
 
 由于此处代码量过大，为了方便理解，笔者做了一个关键路径的流程图。
 
-![image-20200422145833457](/Users/scott/Library/Application Support/typora-user-images/image-20200422145833457.png)
+![image-20200422145833457](https://github.com/sxllwx/debug/blob/master/imgs/grpc-server/server-work-flow.png)
