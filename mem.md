@@ -18,7 +18,7 @@
 ## 几个基本知识点:
 
 1. 以`MADV_FREE`释放的内存不会减少RSS, 以`MADV_DONOTNEED`释放的内存会减少RSS
-2. 
+2. golang的内存分析应该从Stack和Heap，拆开看。
 
 > `MADV_DONOTNEED`标记的内存会在访问的时候出现缺页(PageFault)但是`MADV_FREE`不会, 前者代价很高
 
